@@ -1,296 +1,141 @@
-Contribution: 2018-10-15 10:00
+# FaceDetector
 
-Contribution: 2018-10-15 10:01
+Want to detect human faces on a camera preview stream in real time? Well, you came to the right place.
 
-Contribution: 2018-10-15 10:02
+FaceDetector is a library which:
 
-Contribution: 2018-10-15 10:03
+- detects faces
+- works on Android
+- very simple to use
+- works greatly with [Fotoapparat](https://github.com/Fotoapparat/Fotoapparat)
+- you can use it with whichever camera library or source you like
+- uses C++ core which can easily be ported to iOS (we have plans for that)
 
-Contribution: 2018-10-15 10:04
+Detecting faces with `Fotoapparat` is as simple as:
 
-Contribution: 2018-10-15 10:05
+```java
+Fotoapparat
+    .with(context)
+    .into(cameraView)
+    .frameProcessor(
+      FaceDetectorProcessor
+        .with(context)
+        .build()
+    )
+    .build()
+```
 
-Contribution: 2018-10-15 10:06
 
-Contribution: 2018-10-15 10:07
+<img src="/screenshot.gif" width="200" />
 
-Contribution: 2018-10-15 10:08
 
-Contribution: 2018-10-16 10:00
+## How it works
 
-Contribution: 2018-10-18 10:00
+### Step One (optional)
 
-Contribution: 2018-10-18 10:01
+To display detected faces on top of the camera view, set up your layout as following.
 
-Contribution: 2018-10-18 10:02
+```xml
+<io.fotoapparat.facedetector.view.CameraOverlayLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-Contribution: 2018-10-19 10:00
+    <!-- Adjust parameters as you like. But cameraView has to be inside CameraOverlayLayout -->
+    <io.fotoapparat.view.CameraView
+        android:id="@+id/cameraView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-Contribution: 2018-10-19 10:01
+    <!-- This view will display detected faces -->
+    <io.fotoapparat.facedetector.view.RectanglesView
+        android:id="@+id/rectanglesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:rectanglesColor="@color/colorAccent"
+        app:rectanglesStrokeWidth="2dp"/>
 
-Contribution: 2018-10-19 10:02
+</io.fotoapparat.facedetector.view.CameraOverlayLayout>
+```
 
-Contribution: 2018-10-22 10:00
+### Step Two
 
-Contribution: 2018-10-22 10:01
+Create `FaceDetectorProcessor`:
 
-Contribution: 2018-10-23 10:00
+Java:
 
-Contribution: 2018-10-23 10:01
+```java
+FaceDetectorProcessor processor = FaceDetectorProcessor.with(this)
+    .listener(faces -> {
+        rectanglesView.setRectangles(faces);  // (Optional) Show detected faces on the view.
 
-Contribution: 2018-10-23 10:02
+        // ... or do whatever you want with the result
+    })
+    .build()
+```
 
-Contribution: 2018-10-23 10:03
+or Kotlin:
 
-Contribution: 2018-10-23 10:04
+```kotlin
+private val processor = FaceDetectorProcessor.with(this)
+    .listener({ faces ->
+        rectanglesView.setRectangles(faces)  // (Optional) Show detected faces on the view.
 
-Contribution: 2018-10-23 10:05
+        // ... or do whatever you want with the result
+    })
+    .build()
+```
 
-Contribution: 2018-10-23 10:06
+### Step Three
 
-Contribution: 2018-10-23 10:07
+Attach the processor to `Fotoapparat`
 
-Contribution: 2018-10-23 10:08
+```java
+Fotoapparat.with(this)
+    .into(cameraView)
+    // the rest of configuration
+    .frameProcessor(processor)
+    .build()
+```
 
-Contribution: 2018-10-23 10:09
+And you are good to go!
 
-Contribution: 2018-10-23 10:10
+## Set up
 
-Contribution: 2018-10-29 10:00
+Add dependency to your `build.gradle`
 
-Contribution: 2018-10-29 10:01
+```groovy
+repositories {
+    maven { 
+        url  "http://dl.bintray.com/fotoapparat/fotoapparat" 
+    }
+}
 
-Contribution: 2018-10-29 10:02
+implementation 'io.fotoapparat:facedetector:1.0.0'
 
-Contribution: 2018-10-30 10:00
+// If you are using Fotoapparat add this one as well
+implementation 'io.fotoapparat.fotoapparat:library:1.2.0' // or later version
+```
 
-Contribution: 2018-10-30 10:01
+## Contact us
 
-Contribution: 2018-10-30 10:02
+Impressed? We are actually open for your projects.
 
-Contribution: 2018-11-01 10:00
+If you want some particular computer vision algorithm (document recognition, photo processing or more), drop us a line at fotoapparat.team@gmail.com.
 
-Contribution: 2018-11-01 10:01
+## License
 
-Contribution: 2018-11-01 10:02
+```
+Copyright 2017 Fotoapparat
 
-Contribution: 2018-11-01 10:03
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-Contribution: 2018-11-01 10:04
+    http://www.apache.org/licenses/LICENSE-2.0
 
-Contribution: 2018-11-01 10:05
-
-Contribution: 2018-11-01 10:06
-
-Contribution: 2018-11-07 10:00
-
-Contribution: 2018-11-07 10:01
-
-Contribution: 2018-11-16 10:00
-
-Contribution: 2018-11-16 10:01
-
-Contribution: 2018-11-16 10:02
-
-Contribution: 2018-11-16 10:03
-
-Contribution: 2018-11-16 10:04
-
-Contribution: 2018-11-16 10:05
-
-Contribution: 2018-11-16 10:06
-
-Contribution: 2018-11-16 10:07
-
-Contribution: 2018-11-21 10:00
-
-Contribution: 2018-11-21 10:01
-
-Contribution: 2018-11-21 10:02
-
-Contribution: 2018-11-21 10:03
-
-Contribution: 2018-11-21 10:04
-
-Contribution: 2018-11-21 10:05
-
-Contribution: 2018-11-21 10:06
-
-Contribution: 2018-11-21 10:07
-
-Contribution: 2018-11-21 10:08
-
-Contribution: 2018-11-21 10:09
-
-Contribution: 2018-11-21 10:10
-
-Contribution: 2018-11-27 10:00
-
-Contribution: 2018-11-27 10:01
-
-Contribution: 2018-11-27 10:02
-
-Contribution: 2018-11-27 10:03
-
-Contribution: 2018-11-27 10:04
-
-Contribution: 2018-11-27 10:05
-
-Contribution: 2018-11-27 10:06
-
-Contribution: 2018-11-27 10:07
-
-Contribution: 2018-11-27 10:08
-
-Contribution: 2018-11-27 10:09
-
-Contribution: 2018-11-27 10:10
-
-Contribution: 2018-11-27 10:11
-
-Contribution: 2018-11-30 10:00
-
-Contribution: 2018-11-30 10:01
-
-Contribution: 2018-11-30 10:02
-
-Contribution: 2018-11-30 10:03
-
-Contribution: 2018-11-30 10:04
-
-Contribution: 2018-11-30 10:05
-
-Contribution: 2018-11-30 10:06
-
-Contribution: 2018-11-30 10:07
-
-Contribution: 2018-11-30 10:08
-
-Contribution: 2018-11-30 10:09
-
-Contribution: 2018-11-30 10:10
-
-Contribution: 2018-11-30 10:11
-
-Contribution: 2018-12-05 10:00
-
-Contribution: 2018-12-05 10:01
-
-Contribution: 2018-12-05 10:02
-
-Contribution: 2018-12-05 10:03
-
-Contribution: 2018-12-05 10:04
-
-Contribution: 2018-12-05 10:05
-
-Contribution: 2018-12-05 10:06
-
-Contribution: 2018-12-05 10:07
-
-Contribution: 2018-12-06 10:00
-
-Contribution: 2018-12-06 10:01
-
-Contribution: 2018-12-06 10:02
-
-Contribution: 2018-12-06 10:03
-
-Contribution: 2018-12-06 10:04
-
-Contribution: 2018-12-06 10:05
-
-Contribution: 2018-12-06 10:06
-
-Contribution: 2018-12-06 10:07
-
-Contribution: 2018-12-06 10:08
-
-Contribution: 2018-12-11 10:00
-
-Contribution: 2018-12-11 10:01
-
-Contribution: 2018-12-11 10:02
-
-Contribution: 2018-12-11 10:03
-
-Contribution: 2018-12-11 10:04
-
-Contribution: 2018-12-11 10:05
-
-Contribution: 2018-12-11 10:06
-
-Contribution: 2018-12-11 10:07
-
-Contribution: 2018-12-11 10:08
-
-Contribution: 2018-12-11 10:09
-
-Contribution: 2018-12-11 10:10
-
-Contribution: 2018-12-11 10:11
-
-Contribution: 2018-12-17 10:00
-
-Contribution: 2018-12-17 10:01
-
-Contribution: 2018-12-17 10:02
-
-Contribution: 2018-12-17 10:03
-
-Contribution: 2018-12-17 10:04
-
-Contribution: 2018-12-17 10:05
-
-Contribution: 2018-12-17 10:06
-
-Contribution: 2018-12-20 10:00
-
-Contribution: 2018-12-20 10:01
-
-Contribution: 2018-12-20 10:02
-
-Contribution: 2018-12-20 10:03
-
-Contribution: 2018-12-20 10:04
-
-Contribution: 2018-12-20 10:05
-
-Contribution: 2018-12-20 10:06
-
-Contribution: 2018-12-20 10:07
-
-Contribution: 2018-12-21 10:00
-
-Contribution: 2018-12-21 10:01
-
-Contribution: 2018-12-21 10:02
-
-Contribution: 2018-12-28 10:00
-
-Contribution: 2018-12-28 10:01
-
-Contribution: 2018-12-28 10:02
-
-Contribution: 2018-12-28 10:03
-
-Contribution: 2019-01-07 10:00
-
-Contribution: 2019-01-07 10:01
-
-Contribution: 2019-01-07 10:02
-
-Contribution: 2019-01-07 10:03
-
-Contribution: 2019-01-07 10:04
-
-Contribution: 2019-01-09 10:00
-
-Contribution: 2019-01-09 10:01
-
-Contribution: 2019-01-09 10:02
-
-Contribution: 2019-01-09 10:03
-
-Contribution: 2019-01-09 10:04
-
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

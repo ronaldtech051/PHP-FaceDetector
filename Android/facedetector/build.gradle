@@ -1,0 +1,95 @@
+apply plugin: 'com.android.library'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+    }
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+ext {
+    libraryVersion = '1.0.0'
+
+    bintrayOrganisation = 'fotoapparat'
+    bintrayRepo = 'fotoapparat'
+    bintrayName = 'facedetector'
+
+    publishedGroupId = 'io.fotoapparat'
+    libraryName = 'FaceDetector'
+    artifact = 'facedetector'
+
+    libraryDescription = 'Face detection library which works with Fotoapparat'
+
+    siteUrl = 'https://github.com/Fotoapparat/FaceDetector'
+    gitUrl = 'https://github.com/Fotoapparat/FaceDetector.git'
+
+    developerId = 'fotoapparat'
+    developerName = 'Fotoapparat'
+    developerEmail = 'dmitry.zaicew@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -fexceptions"
+
+                arguments "-DOPENCV_HOME=$OPENCV_HOME", "-DDJINNI_HOME=$DJINNI_HOME"
+            }
+        }
+
+        ndk {
+            abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs += file("$buildDir/generated/java")
+            }
+        }
+    }
+}
+
+dependencies {
+    provided 'io.fotoapparat.fotoapparat:library:1.0.4'
+}
+
+task generateDjinni(type: Exec) {
+    commandLine 'sh', 'generateDjinni.sh', "$DJINNI_HOME/src/run"
+}
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'deploy.gradle'
